@@ -1,29 +1,14 @@
 [
-    {
-        "title": "LED Circuit",
-        "steps": [
-            {
-                "text": "Pak een LED en herken de lange poot.",
-                "imag": "imag/Screenshot 2026-04-23 235713.png"
-            }
-        ]
-    },
-    {
-        "title": "Buzzer",
-        "steps": [
-            {
-                "text": "Sluit de buzzer aan op de batterij.",
-                "imag": "imag/Screenshot 2026-04-23 235713.png"
-            }
-        ]
-    },
-    {
-        "title": "Sensor",
-        "steps": [
-            {
-                "text": "Plaats de sensor op het breadboard.",
-                "imag": "imag/Screenshot 2026-04-23 235713.png"
-            }
-        ]
-    }
+  {
+    "title": "Blinking LED",
+    "era": "Modern Basics",
+    "steps": [
+      "Step 1: Place an LED on the breadboard. Long leg = +.",
+      "Step 2: Connect the long leg to Arduino pin 13.",
+      "Step 3: Connect the short leg to GND using a 220Ω resistor.",
+      "Step 4: Upload the Blink code in Wokwi to make it flash!"
+    ],
+    "sim_url": "https://wokwi.com/projects/344452255569199058"
+  }
 ]
+

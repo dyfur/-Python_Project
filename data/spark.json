@@ -1,0 +1,13 @@
+{
+  "led": [
+    "LEDs have a long leg (+) and a short leg (-).",
+    "If your LED doesn't work, flip it!",
+    "LEDs need a resistor or they burn out."
+  ],
+  "resistor": [
+    "A resistor slows down the current.",
+    "More ohms = less current.",
+    "Resistors protect LEDs."
+  ]
+}
+

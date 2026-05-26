@@ -1,0 +1,13 @@
+{
+  "electronics": [
+    {
+      "question": "What does a resistor do?",
+      "choices": {
+        "A": "It slows down current",
+        "B": "It makes LEDs brighter",
+        "C": "It stores electricity"
+      },
+      "correct": "A"
+    }
+  ]
+}
