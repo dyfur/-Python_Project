@@ -104,7 +104,6 @@ def build_ui(root):
     current_project = {"data": None}
     step_index = {"value": 0}
 
-    # ⭐ neon_button with width/height support
     def neon_button(parent, text, color, command, w=350, h=80):
         box = tk.Frame(
             parent,
@@ -173,7 +172,7 @@ def build_ui(root):
         ).pack(pady=15)
 
     # ---------------------------------------------------
-    # STEP SCREEN 
+    # STEP SCREEN
     # ---------------------------------------------------
 
     step_title_block = neon_button(steps_frame, "", NEON_PINK, lambda: None)
@@ -356,7 +355,7 @@ def build_ui(root):
                     "Tiny boards control everything.\nSpark: \"Even your toaster can be smart!\""
                 ), w=400, h=50).pack(pady=10)
 
-    # ⭐ FIXED TWO BUTTON ROW
+
     wiki_row = tk.Frame(history_frame, bg=CRT_DARK)
     wiki_row.pack(pady=20)
 
@@ -411,23 +410,10 @@ def build_ui(root):
         justify="left"
     )
     feedback_label.pack(pady=15)
-
-    quiz_questions = [
-        {
-            "question": "What does a resistor do?",
-            "A": "It slows down current",
-            "B": "It makes LEDs brighter",
-            "C": "It stores electricity",
-            "correct": "A"
-        },
-        {
-            "question": "What does an LED do?",
-            "A": "It makes sound",
-            "B": "It lights up",
-            "C": "It stores data",
-            "correct": "B"
-        }
-    ]
+   
+    import json
+    with open("quiz.json", "r") as f:
+        quiz_questions = json.load(f)
 
     quiz_index = {"value": 0}
 

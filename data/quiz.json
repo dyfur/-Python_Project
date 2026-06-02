@@ -1,13 +1,107 @@
-{
-  "electronics": [
+[
     {
-      "question": "What does a resistor do?",
-      "choices": {
+        "question": "What does a resistor do?",
         "A": "It slows down current",
         "B": "It makes LEDs brighter",
-        "C": "It stores electricity"
-      },
-      "correct": "A"
+        "C": "It stores electricity",
+        "correct": "A"
+    },
+    {
+        "question": "What does an LED do?",
+        "A": "It makes sound",
+        "B": "It lights up",
+        "C": "It stores data",
+        "correct": "B"
+    },
+    {
+        "question": "What is electricity?",
+        "A": "A flow of tiny particles",
+        "B": "A type of food",
+        "C": "A kind of glue",
+        "correct": "A"
+    },
+    {
+        "question": "What does a battery provide?",
+        "A": "Light",
+        "B": "Electric power",
+        "C": "Music",
+        "correct": "B"
+    },
+    {
+        "question": "What does a switch do?",
+        "A": "Stores energy",
+        "B": "Turns a circuit on or off",
+        "C": "Makes things louder",
+        "correct": "B"
+    },
+    {
+        "question": "What does a wire do?",
+        "A": "Blocks electricity",
+        "B": "Carries electricity",
+        "C": "Cools electricity",
+        "correct": "B"
+    },
+    {
+        "question": "What is a short circuit?",
+        "A": "A safe connection",
+        "B": "A broken battery",
+        "C": "A wrong connection that can cause damage",
+        "correct": "C"
+    },
+    {
+        "question": "What does a buzzer do?",
+        "A": "Makes sound",
+        "B": "Lights up",
+        "C": "Stores heat",
+        "correct": "A"
+    },
+    {
+        "question": "What does a breadboard help you do?",
+        "A": "Cook bread",
+        "B": "Build circuits without soldering",
+        "C": "Make music",
+        "correct": "B"
+    },
+    {
+        "question": "What does a capacitor do?",
+        "A": "Stores small amounts of energy",
+        "B": "Makes LEDs brighter",
+        "C": "Stops electricity forever",
+        "correct": "A"
+    },
+    {
+        "question": "What does a diode do?",
+        "A": "Lets electricity flow one way",
+        "B": "Makes electricity faster",
+        "C": "Stores electricity",
+        "correct": "A"
+    },
+    {
+        "question": "What does a microcontroller do?",
+        "A": "Controls circuits with code",
+        "B": "Makes loud sounds",
+        "C": "Stores food",
+        "correct": "A"
+    },
+    {
+        "question": "What is voltage?",
+        "A": "The push behind electricity",
+        "B": "The color of a wire",
+        "C": "A type of resistor",
+        "correct": "A"
+    },
+    {
+        "question": "What is current?",
+        "A": "The speed of light",
+        "B": "The flow of electricity",
+        "C": "A type of battery",
+        "correct": "B"
+    },
+    {
+        "question": "Why do we use resistors with LEDs?",
+        "A": "To make them louder",
+        "B": "To protect them from too much current",
+        "C": "To make them heavier",
+        "correct": "B"
     }
-  ]
-}
+]
