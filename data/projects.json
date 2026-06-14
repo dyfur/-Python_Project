@@ -1,14 +1,44 @@
-[
-  {
-    "title": "Blinking LED",
-    "era": "Modern Basics",
-    "steps": [
-      "Step 1: Place an LED on the breadboard. Long leg = +.",
-      "Step 2: Connect the long leg to Arduino pin 13.",
-      "Step 3: Connect the short leg to GND using a 220Ω resistor.",
-      "Step 4: Upload the Blink code in Wokwi to make it flash!"
-    ],
-    "sim_url": "https://wokwi.com/projects/344452255569199058"
-  }
-]
-
+{
+  "projects": [
+    {
+      "title": "Blinking LED",
+      "era": "Modern Basics",
+      "fun_fact": "LEDs were invented in 1962 and the first ones could only glow red!",
+      "steps": ["Place an LED on the breadboard. Long leg = positive (+), short leg = negative (-).",
+        "Connect the long leg of the LED to Arduino pin 13 using a jumper wire.",
+        "Connect the short leg to GND through a 220Ω resistor.",
+        "Open Wokwi and upload the Blink example code to make the LED flash."
+      ],
+      "sim_url": "https://wokwi.com/projects/new/arduino-uno",
+      "button_color": "#FF4DA6"
+    },
+    {
+      "title": "Push Button with 3 LEDs",
+      "era": "Home Gadgets",
+      "fun_fact": "The first push buttons were invented in the 1800s for telegraph machines!",
+      "steps": ["Place 3 LEDs on the breadboard: Red, Yellow, and Green. Keep each LED in its own row.",
+        "Connect the long legs of the LEDs to pins 13 (Red), 12 (Yellow), and 11 (Green).",
+        "Connect all short legs to GND using resistors.",
+        "Place a push button on the breadboard so it bridges the center gap.",
+        "Connect one side of the button to pin 2, and the other side to GND.",
+        "Use INPUT_PULLUP in your code so the button works without extra resistors.",
+        "Upload the code in Wokwi and press the button to cycle through the LEDs."
+      ],
+      "sim_url": "https://wokwi.com/projects/new/arduino-uno",
+      "button_color": "#00FF88"
+    },
+    {
+      "title": "Traffic Light System",
+      "era": "City Streets",
+      "fun_fact": "The first electric traffic light was installed in 1914 in Cleveland, Ohio!",
+      "steps": ["Place 3 LEDs on the breadboard: Red at the top, Yellow in the middle, Green at the bottom.",
+        "Connect the long legs of the LEDs to pins 13 (Red), 12 (Yellow), and 11 (Green).",
+        "Connect the short legs of all LEDs to GND using resistors.",
+        "Write code that turns on Red → waits → Yellow → waits → Green → waits.",
+        "Upload the code in Wokwi to see your traffic light system in action."
+      ],
+      "sim_url": "https://wokwi.com/projects/new/arduino-uno",
+      "button_color": "#4DDCFF"
+    }
+  ]
+}

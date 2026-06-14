@@ -1,58 +1,263 @@
-projects = [
-    {
-        "title": "Blinking LED",
-        "era": "Modern Basics",
-        "steps": [
-            "Step 1: Place an LED on the breadboard. Long leg = +.",
-            "Step 2: Connect the long leg to Arduino pin 13.",
-            "Step 3: Connect the short leg to GND using a 220Ω resistor.",
-            "Step 4: Upload the Blink code in Wokwi to make it flash!"
+import json
+import tkinter as tk
+import webbrowser
+
+from spark_chatbot import ask_spark
+
+CRT_DARK = "#0A0F0D"
+NEON_PINK = "#FF4DA6"
+NEON_BLUE = "#4DDCFF"
+NEON_YELLOW = "#FFE066"
+NEON_GREEN = "#00FF88"
+
+with open("data/projects.json", "r", encoding="utf-8") as f:
+    projects = json.load(f)["projects"]
+
+
+def build_project_ui(root, show_frame, home_frame, spark_say):
+    project_frame = tk.Frame(root, bg=CRT_DARK)
+    steps_frame = tk.Frame(root, bg=CRT_DARK)
+    completed_frame = tk.Frame(root, bg=CRT_DARK)
+
+    current_project = {"data": None}
+    step_index = {"value": 0}
+    hint_counter = {"count": 0}
+
+    # UPDATED step‑specific hints
+    step_hints = {
+        "Blinking LED": [
+            "Double‑check that the long leg of the LED goes to pin 13.",
+            "Make sure the resistor is connected to the short leg.",
+            "If the LED doesn’t blink, try flipping it — LEDs are directional.",
+            "Use the Blink example in Wokwi to test your wiring."
         ],
-        "sim_url": "https://wokwi.com/projects/new/arduino-uno"
-    },
-    {
-        "title": "Traffic Light",
-        "era": "City Streets",
-        "steps": [
-            "Step 1: Place 3 LEDs: Red, Yellow, Green.",
-            "Step 2: Connect Red to pin 13, Yellow to pin 12, Green to pin 11.",
-            "Step 3: Connect all short legs to GND with resistors.",
-            "Step 4: Run the traffic light code in Wokwi!"
+        "Push Button with 3 LEDs": [
+            "Each LED must be in its own row so they don’t short together.",
+            "Red → 13, Yellow → 12, Green → 11. Check the long legs.",
+            "Use INPUT_PULLUP so the button works without extra resistors.",
+            "If nothing happens, check that one side of the button goes to GND."
         ],
-        "sim_url": "https://wokwi.com/projects/new/arduino-uno"
-    },
-    {
-        "title": "Buzzer Doorbell",
-        "era": "Home Gadgets",
-        "steps": [
-            "Step 1: Place a buzzer on the breadboard.",
-            "Step 2: Connect + to pin 8 and - to GND.",
-            "Step 3: Add a pushbutton between pin 2 and GND.",
-            "Step 4: Press the button in Wokwi to ring the bell!"
-        ],
-        "sim_url": "https://wokwi.com/projects/new/arduino-uno"
+        "Traffic Light System": [
+            "Place the LEDs vertically: Red, Yellow, Green.",
+            "Check that Red → 13, Yellow → 12, Green → 11.",
+            "Each LED needs its own resistor to GND.",
+            "Use delays in your code so the sequence is visible."
+        ]
     }
-]
 
-hints = {
-    "Blinking LED": [
-        "Hint: The long leg of the LED must go to pin 13.",
-        "Hint: Make sure the LED legs are in different rows.",
-        "Hint: The resistor must go between the short leg and GND.",
-        "Hint: In Wokwi, try the built‑in Blink example!"
-    ],
-    "Traffic Light": [
-        "Hint: Red = pin 13, Yellow = pin 12, Green = pin 11.",
-        "Hint: Each LED needs its own resistor.",
-        "Hint: Check that each LED is in its own row.",
-        "Hint: Try slowing down the delay to see the sequence clearly."
-    ],
-    "Buzzer Doorbell": [
-        "Hint: The + pin of the buzzer goes to pin 8.",
-        "Hint: The button must connect to GND on one side.",
-        "Hint: Use INPUT_PULLUP in code so the button works.",
-        "Hint: Try holding the button to hear a longer beep!"
-    ]
-}
+    
+    image_hints = {
+        "Blinking LED": "images/blinking_led_hint.png",
+        "Push Button with 3 LEDs": "images/button_3leds_hint.png",
+        "Traffic Light System": "images/traffic_light_hint.png"
+    }
 
+    def neon_button(parent, text, color, command, w=200, h=60):
+        box = tk.Frame(
+            parent,
+            bg=CRT_DARK,
+            highlightthickness=3,
+            highlightbackground=color,
+            width=w,
+            height=h
+        )
+        box.pack_propagate(False)
 
+        tk.Button(
+            box,
+            text=text,
+            font=("Courier New", 16, "bold"),
+            fg=color,
+            bg=CRT_DARK,
+            bd=0,
+            command=command
+        ).pack(fill="both", expand=True)
+
+        return box
+
+    tk.Label(
+        project_frame,
+        text="PROJECTS",
+        font=("Courier New", 26, "bold"),
+        fg=NEON_GREEN,
+        bg=CRT_DARK
+    ).pack(pady=20)
+
+    def open_project(project):
+        current_project["data"] = project
+        step_index["value"] = 0
+        hint_counter["count"] = 0
+        spark_say(f"Let's explore {project['title']} from the {project['era']} era!")
+        show_frame(steps_frame)
+        reset_step_screen()
+
+    for p in projects:
+        neon_button(
+            project_frame,
+            p["title"],
+            p.get("button_color", NEON_BLUE),
+            command=lambda proj=p: open_project(proj)
+        ).pack(pady=15)
+
+    neon_button(
+        project_frame,
+        "BACK TO HOME",
+        NEON_PINK,
+        lambda: show_frame(home_frame)
+    ).pack(pady=20)
+
+    step_title = tk.Label(
+        steps_frame,
+        text="",
+        font=("Courier New", 20, "bold"),
+        fg=NEON_PINK,
+        bg=CRT_DARK
+    )
+    step_title.pack(pady=20)
+
+    fun_fact_label = tk.Label(
+        steps_frame,
+        text="",
+        font=("Courier New", 12),
+        fg=NEON_BLUE,
+        bg=CRT_DARK
+    )
+    fun_fact_label.pack(pady=10)
+
+    step_text = tk.Label(
+        steps_frame,
+        text="",
+        font=("Courier New", 14),
+        fg=NEON_BLUE,
+        bg=CRT_DARK,
+        wraplength=500,
+        justify="left"
+    )
+    step_text.pack(pady=20)
+
+    
+    hint_label = tk.Label(
+        steps_frame,
+        text="",
+        font=("Courier New", 12),
+        fg=NEON_YELLOW,
+        bg=CRT_DARK,
+        wraplength=500,
+        justify="left"
+    )
+    hint_label.pack(pady=10)
+
+    nav = tk.Frame(steps_frame, bg=CRT_DARK)
+    nav.pack(pady=20)
+
+    neon_button(nav, "BACK", NEON_BLUE, lambda: prev_step()).grid(row=0, column=0, padx=10)
+    neon_button(nav, "HINT", NEON_YELLOW, lambda: show_hint()).grid(row=0, column=1, padx=10)
+    neon_button(nav, "NEXT", NEON_GREEN, lambda: next_step()).grid(row=0, column=2, padx=10)
+
+    bottom_nav = tk.Frame(steps_frame, bg=CRT_DARK)
+    bottom_nav.pack(pady=10)
+
+    neon_button(
+        bottom_nav,
+        "OPEN SIMULATOR",
+        NEON_PINK,
+        lambda: webbrowser.open(current_project["data"]["sim_url"]),
+        w=200, h=60
+    ).grid(row=0, column=0, padx=10)
+
+    neon_button(
+        bottom_nav,
+        "BACK TO HOME",
+        NEON_PINK,
+        lambda: show_frame(home_frame),
+        w=200, h=60
+    ).grid(row=0, column=1, padx=10)
+
+    def reset_step_screen():
+        project = current_project["data"]
+        step_index["value"] = 0
+        hint_counter["count"] = 0
+        step_title.config(text=project["title"])
+        fun_fact_label.config(text=f"FUN FACT: {project['fun_fact']}")
+        update_step()
+
+    def update_step():
+        project = current_project["data"]
+        i = step_index["value"]
+        step_text.config(text=f"Step {i+1}:\n\n{project['steps'][i]}")
+        hint_label.config(text="")
+
+    def next_step():
+        project = current_project["data"]
+        if step_index["value"] < len(project["steps"]) - 1:
+            step_index["value"] += 1
+            hint_counter["count"] = 0
+            update_step()
+        else:
+            show_frame(completed_frame)
+
+    def prev_step():
+        if step_index["value"] > 0:
+            step_index["value"] -= 1
+            hint_counter["count"] = 0
+            update_step()
+
+    def show_image_hint(project_title):
+        img_path = image_hints.get(project_title)
+        if not img_path:
+            hint_label.config(text="Super hint image not set yet.")
+            return
+        hint_label.config(text=f"Super Hint: check the image at {img_path}")
+
+    # HINT SYSTEM
+    def show_hint():
+        project = current_project["data"]
+        if project is None:
+            hint_label.config(text="Pick a project first.")
+            return
+
+        i = step_index["value"]
+        title = project["title"]
+
+        hint_counter["count"] += 1
+        count = hint_counter["count"]
+
+        
+        if count == 1:
+            try:
+                prompt = f"hint: {title} step {i+1}: {project['steps'][i]}"
+                hint_text = ask_spark(prompt)
+                hint_label.config(text="Hint: " + hint_text)
+            except Exception:
+                hint_label.config(text="Hint: Spark is confused… check your wiring!")
+            return
+
+        
+        if count == 2:
+            hints_for_project = step_hints.get(title, [])
+            if i < len(hints_for_project):
+                hint_label.config(text="Hint: " + hints_for_project[i])
+            else:
+                hint_label.config(text="Hint: Check your wiring and pin numbers.")
+            return
+
+       
+        hint_label.config(text="Super Hint: this is a stronger clue plus an image.")
+        show_image_hint(title)
+
+    tk.Label(
+        completed_frame,
+        text="PROJECT COMPLETE!",
+        font=("Courier New", 22, "bold"),
+        fg=NEON_GREEN,
+        bg=CRT_DARK
+    ).pack(pady=20)
+
+    neon_button(
+        completed_frame,
+        "BACK TO HOME",
+        NEON_PINK,
+        lambda: show_frame(home_frame)
+    ).pack(pady=20)
+
+    return project_frame, steps_frame, completed_frame

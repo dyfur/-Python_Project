@@ -4,7 +4,7 @@ from screens import build_ui
 def main():
     root = tk.Tk()
     root.title("Electronics with Spark")
-    root.geometry("600x750")
+    root.geometry("660x750")
 
     build_ui(root)
 
