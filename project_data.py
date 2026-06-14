@@ -23,19 +23,20 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
     step_index = {"value": 0}
     hint_counter = {"count": 0}
 
-    # UPDATED step‑specific hints
+    # Hint step
     step_hints = {
         "Blinking LED": [
-            "Double‑check that the long leg of the LED goes to pin 13.",
+            "Check that the long leg of the LED goes to pin 13.",
             "Make sure the resistor is connected to the short leg.",
             "If the LED doesn’t blink, try flipping it — LEDs are directional.",
             "Use the Blink example in Wokwi to test your wiring."
         ],
-        "Push Button with 3 LEDs": [
-            "Each LED must be in its own row so they don’t short together.",
-            "Red → 13, Yellow → 12, Green → 11. Check the long legs.",
-            "Use INPUT_PULLUP so the button works without extra resistors.",
-            "If nothing happens, check that one side of the button goes to GND."
+
+        "Temperature Control with Potentiometer & LCD": [
+            "The middle pin of the potentiometer must go to A0.",
+            "SDA goes to A4 and SCL goes to A5 on the Arduino.",
+            "If the LCD is blank, check the I2C address (usually 0x27).",
+            "Turn the potentiometer slowly to see temperature changes."
         ],
         "Traffic Light System": [
             "Place the LEDs vertically: Red, Yellow, Green.",
@@ -45,9 +46,11 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
         ]
     }
 
-    
     image_hints = {
-        "Blinking LED": "images/blinking_led_hint.png",
+        "Blinking LED":[
+            
+
+        ],
         "Push Button with 3 LEDs": "images/button_3leds_hint.png",
         "Traffic Light System": "images/traffic_light_hint.png"
     }
@@ -115,27 +118,32 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
     )
     step_title.pack(pady=20)
 
-    fun_fact_label = tk.Label(
-        steps_frame,
-        text="",
-        font=("Courier New", 12),
-        fg=NEON_BLUE,
-        bg=CRT_DARK
-    )
-    fun_fact_label.pack(pady=10)
+   #Fun fact 
+    fact_step_frame = tk.Frame(steps_frame, bg=CRT_DARK)
+    fact_step_frame.pack(pady=10)
 
-    step_text = tk.Label(
-        steps_frame,
+    fact_label = tk.Label(
+        fact_step_frame,
         text="",
-        font=("Courier New", 14),
+        font=("Courier New", 14, "bold"),
         fg=NEON_BLUE,
         bg=CRT_DARK,
         wraplength=500,
-        justify="left"
+        justify="center"
     )
-    step_text.pack(pady=20)
+    fact_label.pack(pady=5)
 
-    
+    step_label = tk.Label(
+        fact_step_frame,
+        text="",
+        font=("Courier New", 16),
+        fg=NEON_GREEN,
+        bg=CRT_DARK,
+        wraplength=500,
+        justify="center"
+    )
+    step_label.pack(pady=10)
+
     hint_label = tk.Label(
         steps_frame,
         text="",
@@ -178,13 +186,14 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
         step_index["value"] = 0
         hint_counter["count"] = 0
         step_title.config(text=project["title"])
-        fun_fact_label.config(text=f"FUN FACT: {project['fun_fact']}")
         update_step()
 
     def update_step():
         project = current_project["data"]
         i = step_index["value"]
-        step_text.config(text=f"Step {i+1}:\n\n{project['steps'][i]}")
+
+        fact_label.config(text=f"FACT: {project['fun_fact']}")
+        step_label.config(text=f"Step {i+1}: {project['steps'][i]}")
         hint_label.config(text="")
 
     def next_step():
@@ -209,7 +218,6 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
             return
         hint_label.config(text=f"Super Hint: check the image at {img_path}")
 
-    # HINT SYSTEM
     def show_hint():
         project = current_project["data"]
         if project is None:
@@ -222,7 +230,6 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
         hint_counter["count"] += 1
         count = hint_counter["count"]
 
-        
         if count == 1:
             try:
                 prompt = f"hint: {title} step {i+1}: {project['steps'][i]}"
@@ -232,7 +239,6 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
                 hint_label.config(text="Hint: Spark is confused… check your wiring!")
             return
 
-        
         if count == 2:
             hints_for_project = step_hints.get(title, [])
             if i < len(hints_for_project):
@@ -241,7 +247,6 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
                 hint_label.config(text="Hint: Check your wiring and pin numbers.")
             return
 
-       
         hint_label.config(text="Super Hint: this is a stronger clue plus an image.")
         show_image_hint(title)
 
