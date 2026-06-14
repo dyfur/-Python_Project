@@ -34,7 +34,7 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
             "Use the Blink example in Wokwi to test your wiring."
         ],
 
-        "Temperature Control with Potentiometer & LCD": [
+        "Temperature Control": [
             "The middle pin of the potentiometer must go to A0.",
             "SDA goes to A4 and SCL goes to A5 on the Arduino.",
             "If the LCD is blank, check the I2C address (usually 0x27).",
@@ -53,7 +53,7 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
             "images/Led1from1.png",
             "images/Led2from1.png"
         ],
-        "Temperature Control with Potentiometer & LCD": [
+        "Temperature Control": [
             "images/TemperatureControl1.png",
             "images/TemperatureControl2.png",
             "images/TemperatureControl3.png"
@@ -83,6 +83,7 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
             font=("Courier New", 16, "bold"),
             fg=color,
             bg=CRT_DARK,
+            wraplength=w - 20,
             bd=0,
             command=command
         ).pack(fill="both", expand=True)
@@ -235,7 +236,7 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
 
             # Load and resize image
             img = Image.open(img_path)
-            img = img.resize((800, 500))
+            img = img.resize((800, 590))
             tk_img = ImageTk.PhotoImage(img)
 
             img_label = tk.Label(popup, image=tk_img, bg=CRT_DARK)

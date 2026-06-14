@@ -16,7 +16,7 @@ NEON_GREEN = "#00FF88"
 def build_ui(root):
     root.configure(bg=CRT_DARK)
 
-    # HEADER (Spark ASCII)
+    # HEADER
     spark_label = tk.Label(
         root,
         text="/\\_/\\\n(0 - 0)\n/ = \\",
@@ -42,7 +42,7 @@ def build_ui(root):
         fg=NEON_BLUE
     ).pack(pady=0)
 
-    # Spark speech bar (green text under the cat)
+
     spark_speech = tk.Label(
         root,
         text="",
