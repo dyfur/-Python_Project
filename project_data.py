@@ -3,6 +3,8 @@ import tkinter as tk
 import webbrowser
 
 from spark_chatbot import ask_spark
+from PIL import Image, ImageTk
+
 
 CRT_DARK = "#0A0F0D"
 NEON_PINK = "#FF4DA6"
@@ -47,12 +49,21 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
     }
 
     image_hints = {
-        "Blinking LED":[
-            
-
+        "Blinking LED": [
+            "images/Led1from1.png",
+            "images/Led2from1.png"
         ],
-        "Push Button with 3 LEDs": "images/button_3leds_hint.png",
-        "Traffic Light System": "images/traffic_light_hint.png"
+        "Temperature Control with Potentiometer & LCD": [
+            "images/TemperatureControl1.png",
+            "images/TemperatureControl2.png",
+            "images/TemperatureControl3.png"
+        ],
+        "Traffic Light System": [
+            "images/TrafficLight1.png",
+            "images/TrafficLight2.png",
+            "images/TrafficLight3.png",
+            "images/TrafficLight4.png"
+        ]
     }
 
     def neon_button(parent, text, color, command, w=200, h=60):
@@ -118,7 +129,7 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
     )
     step_title.pack(pady=20)
 
-   #Fun fact 
+    # Fun fact and step
     fact_step_frame = tk.Frame(steps_frame, bg=CRT_DARK)
     fact_step_frame.pack(pady=10)
 
@@ -151,10 +162,11 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
         fg=NEON_YELLOW,
         bg=CRT_DARK,
         wraplength=500,
-        justify="left"
+        justify="center"
     )
     hint_label.pack(pady=10)
 
+    # Navigation buttons
     nav = tk.Frame(steps_frame, bg=CRT_DARK)
     nav.pack(pady=20)
 
@@ -211,12 +223,47 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
             hint_counter["count"] = 0
             update_step()
 
+    
+    def open_image_popup(img_path):
+        try:
+            popup = tk.Toplevel()
+            popup.title("Hint Image")
+
+            # Make popup BIG
+            popup.geometry("800x600")
+            popup.configure(bg=CRT_DARK)
+
+            # Load and resize image
+            img = Image.open(img_path)
+            img = img.resize((800, 500))
+            tk_img = ImageTk.PhotoImage(img)
+
+            img_label = tk.Label(popup, image=tk_img, bg=CRT_DARK)
+            img_label.image = tk_img
+            img_label.pack(padx=20, pady=20)
+
+            tk.Button(
+                popup,
+                text="CLOSE",
+                font=("Courier New", 16, "bold"),
+                fg=NEON_PINK,
+                bg=CRT_DARK,
+                bd=0,
+                command=popup.destroy
+            ).pack(pady=10)
+
+        except Exception as e:
+            hint_label.config(text=f"Could not load image: {e}")
+
     def show_image_hint(project_title):
-        img_path = image_hints.get(project_title)
-        if not img_path:
+        img_list = image_hints.get(project_title)
+
+        if not img_list:
             hint_label.config(text="Super hint image not set yet.")
             return
-        hint_label.config(text=f"Super Hint: check the image at {img_path}")
+
+        img_path = img_list[step_index["value"] % len(img_list)]
+        open_image_popup(img_path)
 
     def show_hint():
         project = current_project["data"]
@@ -247,7 +294,7 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
                 hint_label.config(text="Hint: Check your wiring and pin numbers.")
             return
 
-        hint_label.config(text="Super Hint: this is a stronger clue plus an image.")
+        hint_label.config(text="Super Hint: opening image…")
         show_image_hint(title)
 
     tk.Label(
