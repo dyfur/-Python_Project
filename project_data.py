@@ -98,6 +98,13 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
         bg=CRT_DARK
     ).pack(pady=20)
 
+    def reset_step_screen():
+        project = current_project["data"]
+        step_index["value"] = 0
+        hint_counter["count"] = 0
+        step_title.config(text=project["title"])
+        update_step()
+
     def open_project(project):
         current_project["data"] = project
         step_index["value"] = 0
@@ -171,36 +178,6 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
     nav = tk.Frame(steps_frame, bg=CRT_DARK)
     nav.pack(pady=20)
 
-    neon_button(nav, "BACK", NEON_BLUE, lambda: prev_step()).grid(row=0, column=0, padx=10)
-    neon_button(nav, "HINT", NEON_YELLOW, lambda: show_hint()).grid(row=0, column=1, padx=10)
-    neon_button(nav, "NEXT", NEON_GREEN, lambda: next_step()).grid(row=0, column=2, padx=10)
-
-    bottom_nav = tk.Frame(steps_frame, bg=CRT_DARK)
-    bottom_nav.pack(pady=10)
-
-    neon_button(
-        bottom_nav,
-        "OPEN SIMULATOR",
-        NEON_PINK,
-        lambda: webbrowser.open(current_project["data"]["sim_url"]),
-        w=200, h=60
-    ).grid(row=0, column=0, padx=10)
-
-    neon_button(
-        bottom_nav,
-        "BACK TO HOME",
-        NEON_PINK,
-        lambda: show_frame(home_frame),
-        w=200, h=60
-    ).grid(row=0, column=1, padx=10)
-
-    def reset_step_screen():
-        project = current_project["data"]
-        step_index["value"] = 0
-        hint_counter["count"] = 0
-        step_title.config(text=project["title"])
-        update_step()
-
     def update_step():
         project = current_project["data"]
         i = step_index["value"]
@@ -224,17 +201,37 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
             hint_counter["count"] = 0
             update_step()
 
-    
+    neon_button(nav, "BACK", NEON_BLUE, lambda: prev_step()).grid(row=0, column=0, padx=10)
+    neon_button(nav, "HINT", NEON_YELLOW, lambda: show_hint()).grid(row=0, column=1, padx=10)
+    neon_button(nav, "NEXT", NEON_GREEN, lambda: next_step()).grid(row=0, column=2, padx=10)
+
+    bottom_nav = tk.Frame(steps_frame, bg=CRT_DARK)
+    bottom_nav.pack(pady=10)
+
+    neon_button(
+        bottom_nav,
+        "OPEN SIMULATOR",
+        NEON_PINK,
+        lambda: webbrowser.open(current_project["data"]["sim_url"]),
+        w=200, h=60
+    ).grid(row=0, column=0, padx=10)
+
+    neon_button(
+        bottom_nav,
+        "BACK TO HOME",
+        NEON_PINK,
+        lambda: show_frame(home_frame),
+        w=200, h=60
+    ).grid(row=0, column=1, padx=10)
+
     def open_image_popup(img_path):
         try:
             popup = tk.Toplevel()
             popup.title("Hint Image")
 
-            # Make popup BIG
             popup.geometry("800x600")
             popup.configure(bg=CRT_DARK)
 
-            # Load and resize image
             img = Image.open(img_path)
             img = img.resize((800, 590))
             tk_img = ImageTk.PhotoImage(img)
@@ -312,5 +309,14 @@ def build_project_ui(root, show_frame, home_frame, spark_say):
         NEON_PINK,
         lambda: show_frame(home_frame)
     ).pack(pady=20)
+
+    # functions to steps_frame so tests can use them
+    steps_frame.current_project = current_project
+    steps_frame.step_index = step_index
+    steps_frame.hint_counter = hint_counter
+    steps_frame.open_project = open_project
+    steps_frame.show_hint = show_hint
+    steps_frame.next_step = next_step
+    steps_frame.prev_step = prev_step
 
     return project_frame, steps_frame, completed_frame
